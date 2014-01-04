@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
 	    super.onActivityResult(requestCode, resultCode, data);
 	}
 	
-	public void processString(String input){
+	public void setReminder(String input){
 		
 		if(input.matches(".*\\d.*") && input.length() > 9){
 			
@@ -53,9 +53,19 @@ public class MainActivity extends Activity {
 				input = input.substring(9,input.length());
 			}
 			
-			ArrayList<String> inArrayList=new ArrayList<String>(Arrays.asList(input.split(" ")));
-			if(inArrayList.get(0).equalsIgnoreCase("to")||inArrayList.get(0).equalsIgnoreCase("about")){
+			int posIndicator = this.lastIndexOfIndicator(input);
+			ArrayList<Integer> timeValueList = this.getIntsFromString(input.substring(posIndicator));
+			this.setupTimeType(posIndicator, input);
+			
+			if(this.getIndicator().equals("in") || this.getIndicator().equals("after")){
 				
+			}else if(this.getIndicator().equals("at") || this.getIndicator().equals("around")){
+				
+			}else if(this.getIndicator().equals("on")){
+				
+			}else{
+				TextView tv1 = (TextView)findViewById(R.id.fetchtext);
+		        tv1.setText("Speak like, Remind me to study in 5 minutes");
 			}
 		}else{
 			TextView tv1 = (TextView)findViewById(R.id.fetchtext);
@@ -63,7 +73,8 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	public ArrayList getIntsFromString(String input){
+	//returns arraylist of all integers present in input string
+	public ArrayList<Integer> getIntsFromString(String input){
 		
 		input = input.replaceAll("[^0-9]", " ");
 		
@@ -79,6 +90,7 @@ public class MainActivity extends Activity {
 		return intArrayList;
 	}	
 
+	//returns index of last indicator present in input string and also sets value of indicator
 	public int lastIndexOfIndicator(String input){
 		
 		int[] pos = new int[4];
@@ -116,6 +128,7 @@ public class MainActivity extends Activity {
 		return maxPos;
 	}
 	
+	//returns sensible text of reminder from substring of input string starting from startIndex 
 	public String getReminderText(int startIndex,String input){
 		
 		String text = input.substring(startIndex, this.lastIndexOfIndicator(input));
@@ -130,6 +143,7 @@ public class MainActivity extends Activity {
 		
 	}
 	
+	//setupTimeType mentioned in substring of input string starting from startIndex
 	public void setupTimeType(int startIndex, String input){
 		String text = input.substring(startIndex);
 		
@@ -150,13 +164,16 @@ public class MainActivity extends Activity {
 		this.indicator = indicator;
 	}
 	
+	
 	public String getIndicator(){
 		return this.indicator;
 	}
 	
+	
 	public void setTimeType(String timeType){
 		this.timeType = timeType;
 	}
+	
 	
 	public String getTimeType(){
 		return this.timeType;
