@@ -1,14 +1,15 @@
 package glass.remindme;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.CalendarContract.Reminders;
 import android.speech.RecognizerIntent;
 import android.widget.TextView;
 
@@ -59,6 +60,19 @@ public class MainActivity extends Activity {
 	}
 	
 	public void addReminder(Reminder r){
+		ReminderDB rdb= new ReminderDB(getApplicationContext());
+		rdb.add(r); 
+		
+	}
+
+	public void addAlarm(){
+		AlarmManager am=(AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), Alarm.class);
+       // intent.putExtra(ONE_TIME, Boolean.TRUE);
+        
+        PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(),0/*id here*/, intent, 0);
+        
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pi);
 		
 		
 	}
