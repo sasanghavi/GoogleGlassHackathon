@@ -1,5 +1,7 @@
 package glass.remindme;
 
+import glass.remindme.R.string;
+
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,11 +12,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract.Reminders;
 import android.speech.RecognizerIntent;
+import android.support.v4.util.ArrayMap;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
 	public String data, time;
+	public String indicator, timeType;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,23 +44,121 @@ public class MainActivity extends Activity {
 	    }
 	    super.onActivityResult(requestCode, resultCode, data);
 	}
+	
 	public void processString(String input){
-		String temp=input;
-		if(temp.substring(0,9).equalsIgnoreCase("Remind me")){
-			input = input.substring(9,input.length());
-		}
 		
-		if(input.matches(".*\\d.*")){
+		if(input.matches(".*\\d.*") && input.length() > 9){
+			
+			if(input.substring(0,9).equalsIgnoreCase("Remind me")){
+				input = input.substring(9,input.length());
+			}
+			
 			ArrayList<String> inArrayList=new ArrayList<String>(Arrays.asList(input.split(" ")));
 			if(inArrayList.get(0).equalsIgnoreCase("to")||inArrayList.get(0).equalsIgnoreCase("about")){
-//				inArrayList.lastIndexOf(object)
-//				inArrayList.indexOf("")
+				
 			}
 		}else{
-			System.out.println("You did not specified time");
+			TextView tv1 = (TextView)findViewById(R.id.fetchtext);
+	        tv1.setText("You did not specified time");
+		}
+	}
+	
+	public ArrayList getIntsFromString(String input){
+		
+		input = input.replaceAll("[^0-9]", " ");
+		
+		ArrayList<String> stringArrayList = new ArrayList<String>(Arrays.asList(input.split(" ")));
+		ArrayList<Integer> intArrayList = new ArrayList<Integer>();
+		
+		for (String string : stringArrayList) {
+			if(!string.equals("")){
+				intArrayList.add(Integer.parseInt(string));
+			}
+		}
+		
+		return intArrayList;
+	}	
+
+	public int lastIndexOfIndicator(String input){
+		
+		int[] pos = new int[4];
+
+		pos[0] = input.lastIndexOf("in");
+		pos[1] = input.lastIndexOf("after");
+		pos[2] = input.lastIndexOf("at");
+		pos[3] = input.lastIndexOf("around");
+		pos[4] = input.lastIndexOf("on");
+		
+		int max = pos[0], maxPos = 0;
+		// which of the above occures at last and set it as indicator
+		for(int i=1; i<4;i++){
+			if(max < pos[i]){
+				max = pos[i];
+				maxPos = i;
+			}
+		}
+		
+		switch(maxPos){
+			case 0: this.setIndicator("in");
+					break;
+			case 1: this.setIndicator("after");
+					break;
+			case 2: this.setIndicator("at");
+					break;
+			case 3: this.setIndicator("around");
+					break;
+			case 4: this.setIndicator("on");
+					break;
+			default: this.setIndicator("");
+					 break;
+			}
+		
+		return maxPos;
+	}
+	
+	public String getReminderText(int startIndex,String input){
+		
+		String text = input.substring(startIndex, this.lastIndexOfIndicator(input));
+		// remove to/about from begining for saw off of AI
+		if(text.indexOf("to") == 0){
+			return text.substring(2);
+		}else if(text.indexOf("about") == 0){
+			return text.substring(6);
+		}else{
+			return input.substring(10, this.lastIndexOfIndicator(input));
 		}
 		
 	}
 	
-
+	public void setupTimeType(int startIndex, String input){
+		String text = input.substring(startIndex);
+		
+		if(text.contains("minute") || text.contains("minutes")){
+			this.setTimeType("minute");
+		}else if (text.contains("hour") || text.contains("hours")){
+			this.setTimeType("hour");
+		}else if (text.contains("AM")){
+			this.setTimeType("AM");
+		}else if (text.contains("PM")){
+			this.setTimeType("PM");
+		}else{
+			this.setTimeType("");
+		}
+	}
+	
+	public void setIndicator(String indicator){
+		this.indicator = indicator;
+	}
+	
+	public String getIndicator(){
+		return this.indicator;
+	}
+	
+	public void setTimeType(String timeType){
+		this.timeType = timeType;
+	}
+	
+	public String getTimeType(){
+		return this.timeType;
+	}
 }
