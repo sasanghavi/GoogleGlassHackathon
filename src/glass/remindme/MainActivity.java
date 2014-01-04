@@ -58,5 +58,8 @@ public class MainActivity extends Activity {
 		
 	}
 	
-
+	public void addReminder(Reminder r){
+		
+		
+	}
 }
