@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
 
 	public void addAlarm(){
 		AlarmManager am=(AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), Alarm.class);
+        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
        // intent.putExtra(ONE_TIME, Boolean.TRUE);
         
         PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(),0/*id here*/, intent, 0);
