@@ -52,19 +52,35 @@ public class MainActivity extends Activity {
 	
 	public void setReminder(String input){
 		
+		TextView tv1 = (TextView)findViewById(R.id.fetchtext);
+        
+		//get current date and time to calculate time for reminder
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd/HH/mm/ss");
+		Date date = new Date();
+		
+		int year,month,day,hour,minute,second;
+		ArrayList<Integer> timeParameters = this.getIntegerArray(new ArrayList<String>(Arrays.asList(dateFormat.format(date).toString().split("/"))));
+		
+		if(timeParameters.size() == 6){
+			year = timeParameters.get(0);
+			month = timeParameters.get(1);
+			day = timeParameters.get(2);
+			hour = timeParameters.get(3);
+			minute = timeParameters.get(4);
+			second = timeParameters.get(5);
+		}else{
+			tv1.setText("Error in getting time from system");
+			return;
+		}
+		
 		if(input.matches(".*\\d.*") && input.length() > 9){
 			
 			if(input.substring(0,9).equalsIgnoreCase("Remind me")){
 				input = input.substring(9,input.length());
 			}
+
+//			tv1.setText(dateFormat.format(date).toString());
 			
-			//get current date and time to calculate time for reminder
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd/HH/mm/ss.SSS");
-			Date date = new Date();
-
-			TextView tv1 = (TextView)findViewById(R.id.fetchtext);
-	        tv1.setText(dateFormat.format(date).toString());
-
 			int posIndicator = this.lastIndexOfIndicator(input);
 			ArrayList<Integer> timeValueList = this.getIntsFromString(input.substring(posIndicator));
 			this.setupTimeType(posIndicator, input);
@@ -79,7 +95,7 @@ public class MainActivity extends Activity {
 					switch(timeValueList.size()){
 					case 1: tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
 							break;
-					case 2: tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
+					case 2: tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + timeValueList.get(1).toString() + " " + this.getTimeType());
 							break;
 					default: tv1.append("Seems like time interpreted is wrong");
 							break;
@@ -89,11 +105,10 @@ public class MainActivity extends Activity {
 			}else if(this.getIndicator().equals("on")){
 				
 			}else{
-		        tv1.append("Speak like, Remind me to study in 5 minutes");
+		        tv1.setText("Speak like, Remind me to study in 5 minutes");
 			}
 		}else{
-			TextView tv1 = (TextView)findViewById(R.id.fetchtext);
-	        tv1.append("You did not specified time");
+	        tv1.setText("You did not specified time");
 		}
 	}
 	
@@ -117,7 +132,7 @@ public class MainActivity extends Activity {
 	//returns index of last indicator present in input string and also sets value of indicator
 	public int lastIndexOfIndicator(String input){
 		
-		int[] pos = new int[4];
+		int[] pos = new int[5];
 
 		pos[0] = input.lastIndexOf("in");
 		pos[1] = input.lastIndexOf("after");
@@ -127,7 +142,7 @@ public class MainActivity extends Activity {
 		
 		int max = pos[0], maxPos = 0;
 		// which of the above occures at last and set it as indicator
-		for(int i=1; i<4;i++){
+		for(int i=1; i<5;i++){
 			if(max < pos[i]){
 				max = pos[i];
 				maxPos = i;
@@ -188,18 +203,33 @@ public class MainActivity extends Activity {
 	public void setupTimeType(int startIndex, String input){
 		String text = input.substring(startIndex);
 		
-		if(text.contains("minute") || text.contains("minutes")){
+		if(text.contains("second") || text.contains("seconds")){
+			this.setTimeType("second");
+		}else if(text.contains("minute") || text.contains("minutes")){
 			this.setTimeType("minute");
 		}else if (text.contains("hour") || text.contains("hours")){
 			this.setTimeType("hour");
-		}else if (text.contains("AM")){
-			this.setTimeType("AM");
-		}else if (text.contains("PM")){
-			this.setTimeType("PM");
+		}else if (text.contains("a m")){
+			this.setTimeType("a m");
+		}else if (text.contains("p m")){
+			this.setTimeType("p m");
 		}else{
 			this.setTimeType("");
 		}
 	}
+	
+	private ArrayList<Integer> getIntegerArray(ArrayList<String> stringArray) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        for(String stringValue : stringArray) {
+            try {
+                //Convert String to Integer, and store it into integer array list.
+                result.add(Integer.parseInt(stringValue));
+            } catch(NumberFormatException nfe) {
+               System.out.println("Could not parse " + nfe);
+            }
+        }   
+        return result;
+    }
 
 	public void setIndicator(String indicator){
 		this.indicator = indicator;
@@ -218,7 +248,6 @@ public class MainActivity extends Activity {
 	
 	public String getTimeType(){
 		return this.timeType;
-
 	}
 
 	@Override
