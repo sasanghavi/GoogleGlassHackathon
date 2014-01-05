@@ -27,6 +27,7 @@ import android.widget.Toast;
 public class AlarmReceiver extends Activity {
 	int id;
 	ReminderDB db;
+	MediaPlayer mp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class AlarmReceiver extends Activity {
 		id = getIntent().getIntExtra("ID", 0);
 		db = new ReminderDB(getApplicationContext());
 		data.setText("You need to "+db.get(id));
-		MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.remind_me_theme);   
+		mp = MediaPlayer.create(getApplicationContext(), R.raw.remind_me_theme);   
         mp.start();
 		openOptionsMenu();
 		RelativeLayout layout=(RelativeLayout)findViewById(R.id.layout);
@@ -64,12 +65,14 @@ public class AlarmReceiver extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		if(item.getItemId()==R.id.ok){
+			mp.stop();
 			finish();
 			return true;
 		}
 		else if(item.getItemId()==R.id.later){
 			Toast.makeText(getApplicationContext(), "Will Remind later", Toast.LENGTH_SHORT).show();
 			delayAlarm();
+			mp.stop();
 			finish();
 			return true;
 		}
