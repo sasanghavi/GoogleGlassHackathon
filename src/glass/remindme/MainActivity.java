@@ -185,8 +185,8 @@ public class MainActivity extends Activity {
 		}else if(text.indexOf("about") == 0){
 			return text.substring(6);
 		}else{
-			if(input.length() < this.lastIndexOfIndicator(input) && this.lastIndexOfIndicator(input) > 10){
-				return input.substring(10, this.lastIndexOfIndicator(input));
+			if(input.length() < this.lastIndexOfIndicator(input)){
+				return input.substring(0, this.lastIndexOfIndicator(input));
 			}else{
 				return "Its reminder";
 			}
