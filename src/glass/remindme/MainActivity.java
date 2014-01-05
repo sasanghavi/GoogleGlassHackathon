@@ -1,18 +1,15 @@
 package glass.remindme;
 
-import glass.remindme.R.string;
-
-import java.sql.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.CalendarContract.Reminders;
 import android.speech.RecognizerIntent;
-import android.support.v4.util.ArrayMap;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -40,6 +37,7 @@ public class MainActivity extends Activity {
 	        String spokenText = results.get(0);
 	        TextView tv1 = (TextView)findViewById(R.id.fetchtext);
 	        tv1.setText(spokenText);
+	        setReminder(spokenText);
 	        // Do something with spokenText.
 	    }
 	    super.onActivityResult(requestCode, resultCode, data);
@@ -53,6 +51,13 @@ public class MainActivity extends Activity {
 				input = input.substring(9,input.length());
 			}
 			
+			//get current date and time to calculate time for reminder
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd/HH/mm/ss.SSS");
+			Date date = new Date();
+
+			TextView tv1 = (TextView)findViewById(R.id.fetchtext);
+	        tv1.setText(dateFormat.format(date).toString());
+
 			int posIndicator = this.lastIndexOfIndicator(input);
 			ArrayList<Integer> timeValueList = this.getIntsFromString(input.substring(posIndicator));
 			this.setupTimeType(posIndicator, input);
@@ -64,8 +69,8 @@ public class MainActivity extends Activity {
 			}else if(this.getIndicator().equals("on")){
 				
 			}else{
-				TextView tv1 = (TextView)findViewById(R.id.fetchtext);
-		        tv1.setText("Speak like, Remind me to study in 5 minutes");
+				TextView tv2 = (TextView)findViewById(R.id.fetchtext);
+		        tv2.setText("Speak like, Remind me to study in 5 minutes");
 			}
 		}else{
 			TextView tv1 = (TextView)findViewById(R.id.fetchtext);
@@ -159,7 +164,7 @@ public class MainActivity extends Activity {
 			this.setTimeType("");
 		}
 	}
-	
+
 	public void setIndicator(String indicator){
 		this.indicator = indicator;
 	}
