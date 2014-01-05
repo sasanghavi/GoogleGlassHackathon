@@ -90,26 +90,28 @@ public class MainActivity extends Activity {
 			
 			if(this.getIndicator().equals("in") || this.getIndicator().equals("after")){
 				if(!timeValueList.isEmpty()){
-					tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + this.getTimeType());
-					
-					
-					addAlarm(year,month,day,hour,minute,second+15,this.getReminderText(0, input));
+					if(this.getTimeType().equals("second")){
+						addAlarm(year,month,day,hour,minute,second + timeValueList.get(0)%60,this.getReminderText(0, input));
+					}else if(this.getTimeType().equals("minute")){
+						addAlarm(year,month,day,hour,minute + timeValueList.get(0)%60,second,this.getReminderText(0, input));
+					}else if(this.getTimeType().equals("hour")){
+						addAlarm(year,month,day,hour + timeValueList.get(0)%12,minute,second,this.getReminderText(0, input));
+					}else{
+						tv1.setText("Failed to set alarm from in/after");
+					}
 				}
 			}else if(this.getIndicator().equals("at") || this.getIndicator().equals("around")){
 				if(!timeValueList.isEmpty()){
-
-					switch(timeValueList.size()){
-					case 1: tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
-							break;
-					case 2: tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + timeValueList.get(1).toString() + " " + this.getTimeType());
-							break;
-					default: tv1.append("Seems like time interpreted is wrong");
-							break;
+					if(this.getTimeType().equals("a m")){
+						addAlarm(year,month,day,timeValueList.get(0)%12,minute,second,this.getReminderText(0, input));
+					}else if(this.getTimeType().equals("p m")){
+						addAlarm(year,month,day, 12 + timeValueList.get(0)%12 ,minute,second,this.getReminderText(0, input));
+					}else{
+						tv1.setText("Failed to set alarm from at/around");
 					}
-
 				}
 			}else if(this.getIndicator().equals("on")){
-				
+				tv1.setText("Day feature will come soon :)");
 			}else{
 		        tv1.setText("Speak like, Remind me to study in 5 minutes");
 			}
@@ -183,7 +185,11 @@ public class MainActivity extends Activity {
 		}else if(text.indexOf("about") == 0){
 			return text.substring(6);
 		}else{
-			return input.substring(10, this.lastIndexOfIndicator(input));
+			if(input.length() < this.lastIndexOfIndicator(input) && this.lastIndexOfIndicator(input) > 10){
+				return input.substring(10, this.lastIndexOfIndicator(input));
+			}else{
+				return "Its reminder";
+			}
 		}
 		
 	}
