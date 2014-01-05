@@ -202,7 +202,7 @@ public class MainActivity extends Activity {
 
 	public void addAlarm(int year,int month, int day, int hour, int minute, int second, String str){
 		AlarmManager am=(AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), AlarmBroadcast.class);
         
        // intent.putExtra(ONE_TIME, Boolean.TRUE);
         Random i = new Random();

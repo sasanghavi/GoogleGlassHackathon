@@ -57,7 +57,7 @@ public class ReminderDB extends SQLiteOpenHelper{
 			);
 		
 		
-		
+		c.moveToFirst();
 		return c.getString(c.getColumnIndex("descr"));
 		
 		
