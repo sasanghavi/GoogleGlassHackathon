@@ -17,12 +17,16 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -58,7 +62,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.card_timer);
 		timelineManager = TimelineManager.from(this);
-		insertNewCardImageFull();
+		
+		
+		
 		displaySpeechRecognizer();
 	}
 	
@@ -229,10 +235,12 @@ public class MainActivity extends Activity {
 		rdb.add(r);
 	}
 
+	public String cardValue="";
+	
 	public void addAlarm(int year,int month, int day, int hour, int minute, int second, String str){
 		AlarmManager am=(AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), AlarmBroadcast.class);
-        
+        Toast.makeText(getApplicationContext(), "Enjoy now ", Toast.LENGTH_SHORT).show();
        // intent.putExtra(ONE_TIME, Boolean.TRUE);
         Random i = new Random();
         int value = i.nextInt(200);
@@ -242,7 +250,14 @@ public class MainActivity extends Activity {
         ReminderDB db = new ReminderDB(getApplicationContext());
         db.add(r);
         db.close();
-        
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		int check = settings.getInt("ID",0);
+        if(check!=0){
+        	timelineManager.delete(check);
+        	
+        }
+        cardValue = str;
+        insertNewCardImageFull();
         PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(),value/*id here*/, intent, 0);
         
         Calendar calendar = Calendar.getInstance();
@@ -253,8 +268,10 @@ public class MainActivity extends Activity {
         
         
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
+        
+        
 		
-		
+		finish();
 	}
 	//setupTimeType mentioned in substring of input string starting from startIndex
 	public void setupTimeType(int startIndex, String input){
@@ -334,11 +351,17 @@ public class MainActivity extends Activity {
 	        Card staticCard = new Card(this);
 	        staticCard.setImageLayout(Card.ImageLayout.FULL);
 	        staticCard.addImage(getRandomPuppyImageResourceId());
-	        staticCard.setFootnote("Your reminder here");
-
+	   //     staticCard.setFootnote(cardValue);
+	        staticCard.setText(cardValue);
+	        staticCard.setFootnote("Remind Me!");
 	        long cardId = timelineManager.insert(staticCard);
 	      //  if(Log.I) Log.i("Static Card (image - full) inserted: cardId = " + cardId);
-
+	        
+	        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			int check = settings.getInt("ID",0);
+			Editor edit = settings.edit();
+			edit.putInt("ID",(int) cardId);
+			edit.apply(); 
 	        // Update the card content with the card Id.
 	        updateCardWithID(staticCard, cardId);
 	    }
