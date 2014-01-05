@@ -2,7 +2,6 @@ package glass.remindme;
 
 
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -68,9 +67,22 @@ public class MainActivity extends Activity {
 			this.setupTimeType(posIndicator, input);
 			
 			if(this.getIndicator().equals("in") || this.getIndicator().equals("after")){
-				
+				if(!timeValueList.isEmpty()){
+					tv1.setText(this.getIndicator() + " " + timeValueList.get(0).toString() + this.getTimeType());
+				}
 			}else if(this.getIndicator().equals("at") || this.getIndicator().equals("around")){
-				
+				if(!timeValueList.isEmpty()){
+
+					switch(timeValueList.size()){
+					case 1: tv1.setText(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
+							break;
+					case 2: tv1.setText(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
+							break;
+					default: tv1.setText("Seems like time interpreted is wrong");
+							break;
+					}
+
+				}
 			}else if(this.getIndicator().equals("on")){
 				
 			}else{
@@ -156,8 +168,7 @@ public class MainActivity extends Activity {
 
 	public void addReminder(Reminder r){
 		ReminderDB rdb= new ReminderDB(getApplicationContext());
-		rdb.add(r); 
-		
+		rdb.add(r);
 	}
 
 	public void addAlarm(){
