@@ -146,7 +146,7 @@ public class MainActivity extends Activity {
 		pos[1] = input.lastIndexOf("after");
 		pos[2] = input.lastIndexOf("at");
 		pos[3] = input.lastIndexOf("around");
-		pos[4] = input.lastIndexOf("on");
+		pos[4] = input.lastIndexOf(" on ");
 		
 		int max = pos[0], maxPos = 0;
 		// which of the above occures at last and set it as indicator
