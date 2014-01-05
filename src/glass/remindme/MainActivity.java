@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import com.google.android.glass.app.Card;
+import com.google.android.glass.timeline.TimelineManager;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -26,10 +29,36 @@ public class MainActivity extends Activity {
 	public String data, time;
 	public String indicator, timeType;
 	public ArrayList<Integer> timeValueList;
+	
+	  // To pick an arbitrary images
+    private final static Random sRandom = new Random(System.currentTimeMillis());
+    private final static int IMAGE_COUNT = 4;
+    private static int getRandomPuppyImageResourceId()
+    {
+        int i = sRandom.nextInt(IMAGE_COUNT);
+        switch(i) {
+        case 0:
+        default:
+            return R.drawable.imagecard;
+        case 1:
+            return R.drawable.imagecard;
+        case 2:
+            return R.drawable.imagecard;
+        case 3:
+            return R.drawable.imagecard;
+        }
+    }
+
+    // Timeline manager instance.
+    private TimelineManager timelineManager = null;
+
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.card_timer);
+		timelineManager = TimelineManager.from(this);
+		insertNewCardImageFull();
 		displaySpeechRecognizer();
 	}
 	
@@ -299,6 +328,37 @@ public class MainActivity extends Activity {
      }
 	}
 	
-	
+	 private void insertNewCardImageFull()
+	    {
+	        // Create a card.
+	        Card staticCard = new Card(this);
+	        staticCard.setImageLayout(Card.ImageLayout.FULL);
+	        staticCard.addImage(getRandomPuppyImageResourceId());
+	        staticCard.setFootnote("Your reminder here");
+
+	        long cardId = timelineManager.insert(staticCard);
+	      //  if(Log.I) Log.i("Static Card (image - full) inserted: cardId = " + cardId);
+
+	        // Update the card content with the card Id.
+	        updateCardWithID(staticCard, cardId);
+	    }
+	 
+	 private void updateCardWithID(Card staticCard, long id)
+	    {
+	        if(staticCard != null) {
+	            String content = staticCard.getText();
+	            if(content == null) {  // ????
+	                content = "";
+	            }
+	          //  content += "\nID: " + id;
+	         //   if(Log.D) Log.d("New Static Card content: cardId = " + id + "; content = " + content);
+	        //    staticCard.setText(content);
+	            boolean suc = timelineManager.update(id, staticCard);
+	         //   if(Log.I) Log.i("Static Card updated: cardId = " + id + "; suc = " + suc);
+	        } else {
+	            // ???
+	           // Log.w("Card not found for cardId = " + id);
+	        }
+	    }
 	
 }
