@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="640px"
     android:layout_height="320px" 
-    android:padding="10dp">
+    android:padding="10dp"
+    android:background="@drawable/sunny_day_summer-wallpaper-640x480">
 
     <TextView
         android:id="@+id/textView1"
