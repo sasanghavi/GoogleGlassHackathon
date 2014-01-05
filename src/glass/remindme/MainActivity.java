@@ -14,6 +14,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -68,17 +71,17 @@ public class MainActivity extends Activity {
 			
 			if(this.getIndicator().equals("in") || this.getIndicator().equals("after")){
 				if(!timeValueList.isEmpty()){
-					tv1.setText(this.getIndicator() + " " + timeValueList.get(0).toString() + this.getTimeType());
+					tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + this.getTimeType());
 				}
 			}else if(this.getIndicator().equals("at") || this.getIndicator().equals("around")){
 				if(!timeValueList.isEmpty()){
 
 					switch(timeValueList.size()){
-					case 1: tv1.setText(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
+					case 1: tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
 							break;
-					case 2: tv1.setText(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
+					case 2: tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
 							break;
-					default: tv1.setText("Seems like time interpreted is wrong");
+					default: tv1.append("Seems like time interpreted is wrong");
 							break;
 					}
 
@@ -86,12 +89,11 @@ public class MainActivity extends Activity {
 			}else if(this.getIndicator().equals("on")){
 				
 			}else{
-				TextView tv2 = (TextView)findViewById(R.id.fetchtext);
-		        tv2.setText("Speak like, Remind me to study in 5 minutes");
+		        tv1.append("Speak like, Remind me to study in 5 minutes");
 			}
 		}else{
 			TextView tv1 = (TextView)findViewById(R.id.fetchtext);
-	        tv1.setText("You did not specified time");
+	        tv1.append("You did not specified time");
 		}
 	}
 	
@@ -218,4 +220,28 @@ public class MainActivity extends Activity {
 		return this.timeType;
 
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		 MenuInflater inflater = getMenuInflater();
+	        inflater.inflate(R.menu.confirm, menu);
+	        return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		 switch (item.getItemId()) {
+         case R.id.ok:
+             startActivity(new Intent(this, Reminder.class));
+             return true;
+         case R.id.cancel:
+        	 displaySpeechRecognizer();
+             return true;
+         default:
+             return super.onOptionsItemSelected(item);
+     }
+	}
+	
+	
+	
 }
