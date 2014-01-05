@@ -8,7 +8,7 @@
         android:title="@string/ok"/>
     <item
         android:id="@+id/later"
-        android:icon="@drawable/ic_stop"
+        android:icon="@drawable/ic_timer"
         android:title="Remind Later"/>
 
 </menu>

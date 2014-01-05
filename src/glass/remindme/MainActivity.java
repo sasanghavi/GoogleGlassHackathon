@@ -141,6 +141,8 @@ public class MainActivity extends Activity {
 						addAlarm(year,month,day,timeValueList.get(0)%12,minute,second,this.getReminderText(0, input));
 					}else if(this.getTimeType().equals("p m")){
 						addAlarm(year,month,day, 12 + timeValueList.get(0)%12 ,minute,second,this.getReminderText(0, input));
+					}else if(this.getTimeType().equals("o'clock")){
+						addAlarm(year,month,day, 12 + timeValueList.get(0)%12 ,minute,second,this.getReminderText(0, input));
 					}else{
 						tv1.setText("Failed to set alarm from at/around");
 					}
@@ -287,6 +289,8 @@ public class MainActivity extends Activity {
 			this.setTimeType("a m");
 		}else if (text.contains("p m")){
 			this.setTimeType("p m");
+		}else if (text.contains("o'clock")){
+			this.setTimeType("o'clock");
 		}else{
 			this.setTimeType("");
 		}
