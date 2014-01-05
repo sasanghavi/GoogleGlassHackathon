@@ -24,6 +24,9 @@
                 android:resource="@xml/voice_trigger_start" />
            
         </activity>
+        
+        <receiver android:process=":remote"
+                android:name="AlarmBroadcast" />
     </application>
 
 </manifest>

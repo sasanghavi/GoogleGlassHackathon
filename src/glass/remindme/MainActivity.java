@@ -93,7 +93,7 @@ public class MainActivity extends Activity {
 					tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + this.getTimeType());
 					
 					
-					addAlarm(year,month,day,hour,minute,second+15,this.getReminderText(0, input));
+					addAlarm(year,month,day,hour,minute,second+15,"Hello World");
 				}
 			}else if(this.getIndicator().equals("at") || this.getIndicator().equals("around")){
 				if(!timeValueList.isEmpty()){
@@ -196,7 +196,7 @@ public class MainActivity extends Activity {
 
 	public void addAlarm(int year,int month, int day, int hour, int minute, int second, String str){
 		AlarmManager am=(AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), AlarmBroadcast.class);
         
        // intent.putExtra(ONE_TIME, Boolean.TRUE);
         Random i = new Random();
