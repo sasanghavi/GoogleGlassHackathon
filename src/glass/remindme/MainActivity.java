@@ -353,7 +353,9 @@ public class MainActivity extends Activity {
 	        staticCard.addImage(getRandomPuppyImageResourceId());
 	   //     staticCard.setFootnote(cardValue);
 	        staticCard.setText(cardValue);
-	        staticCard.setFootnote("Remind Me!");
+	        Calendar c = Calendar.getInstance();
+	        staticCard.setFootnote("Remind Me!  -  "+c.get(Calendar.DATE)+
+	        		"/"+c.get(Calendar.MONTH)+"/"+c.get(Calendar.YEAR));
 	        long cardId = timelineManager.insert(staticCard);
 	      //  if(Log.I) Log.i("Static Card (image - full) inserted: cardId = " + cardId);
 	        
