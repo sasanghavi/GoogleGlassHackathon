@@ -358,7 +358,7 @@ public class MainActivity extends Activity {
 	   //     staticCard.setFootnote(cardValue);
 	        staticCard.setText(cardValue);
 	        Calendar c = Calendar.getInstance();
-	        staticCard.setFootnote("Remind Me!  -  "+c.get(Calendar.DATE)+
+	        staticCard.setFootnote("Remind Me!  - created at "+c.get(Calendar.DATE)+
 	        		"/"+c.get(Calendar.MONTH)+"/"+c.get(Calendar.YEAR));
 	        long cardId = timelineManager.insert(staticCard);
 	      //  if(Log.I) Log.i("Static Card (image - full) inserted: cardId = " + cardId);
