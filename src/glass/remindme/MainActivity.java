@@ -2,7 +2,6 @@ package glass.remindme;
 
 
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -71,18 +70,30 @@ public class MainActivity extends Activity {
 			this.setupTimeType(posIndicator, input);
 			
 			if(this.getIndicator().equals("in") || this.getIndicator().equals("after")){
-				
+				if(!timeValueList.isEmpty()){
+					tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + this.getTimeType());
+				}
 			}else if(this.getIndicator().equals("at") || this.getIndicator().equals("around")){
-				
+				if(!timeValueList.isEmpty()){
+
+					switch(timeValueList.size()){
+					case 1: tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
+							break;
+					case 2: tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + " " + timeValueList.get(0).toString() + " " + this.getTimeType());
+							break;
+					default: tv1.append("Seems like time interpreted is wrong");
+							break;
+					}
+
+				}
 			}else if(this.getIndicator().equals("on")){
 				
 			}else{
-				TextView tv2 = (TextView)findViewById(R.id.fetchtext);
-		        tv2.setText("Speak like, Remind me to study in 5 minutes");
+		        tv1.append("Speak like, Remind me to study in 5 minutes");
 			}
 		}else{
 			TextView tv1 = (TextView)findViewById(R.id.fetchtext);
-	        tv1.setText("You did not specified time");
+	        tv1.append("You did not specified time");
 		}
 	}
 	
@@ -159,8 +170,7 @@ public class MainActivity extends Activity {
 
 	public void addReminder(Reminder r){
 		ReminderDB rdb= new ReminderDB(getApplicationContext());
-		rdb.add(r); 
-		
+		rdb.add(r);
 	}
 
 	public void addAlarm(){
