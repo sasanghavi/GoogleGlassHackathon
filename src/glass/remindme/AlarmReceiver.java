@@ -10,7 +10,9 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.glass.media.Sounds;
 
@@ -34,11 +36,23 @@ public class AlarmReceiver extends Activity {
 		AudioManager audio = (AudioManager) getApplicationContext()
 				.getSystemService(Context.AUDIO_SERVICE);
 		audio.playSoundEffect(Sounds.ERROR);
+		openOptionsMenu();
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		 MenuInflater inflater = getMenuInflater();
-	        inflater.inflate(R.menu.alarm_receiver, menu);
+	        inflater.inflate(R.menu.alarm_receiver_menu, menu);
 	        return true;
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		if(item.getItemId()==R.id.ok){
+			finish();
+		}
+		else if(item.getItemId()==R.id.later){
+			Toast.makeText(getApplicationContext(), "Remind later", Toast.LENGTH_SHORT).show();
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }
