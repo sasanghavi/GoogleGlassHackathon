@@ -207,7 +207,7 @@ public class MainActivity extends Activity {
 					 break;
 			}
 		
-		return maxPos;
+		return max;
 	}
 	
 	//returns sensible text of reminder from substring of input string starting from startIndex 
