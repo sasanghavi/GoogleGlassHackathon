@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.TextView;
 
 import com.google.android.glass.media.Sounds;
@@ -32,5 +34,11 @@ public class AlarmReceiver extends Activity {
 		AudioManager audio = (AudioManager) getApplicationContext()
 				.getSystemService(Context.AUDIO_SERVICE);
 		audio.playSoundEffect(Sounds.ERROR);
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		 MenuInflater inflater = getMenuInflater();
+	        inflater.inflate(R.menu.alarm_receiver, menu);
+	        return true;
 	}
 }
