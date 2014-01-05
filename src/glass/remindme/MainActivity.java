@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -92,7 +93,7 @@ public class MainActivity extends Activity {
 					tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + this.getTimeType());
 					
 					
-				//	addAlarm(year,month,day,hour,minute,second,message);
+					addAlarm(year,month,day,hour,minute,second+15,this.getReminderText(0, input));
 				}
 			}else if(this.getIndicator().equals("at") || this.getIndicator().equals("around")){
 				if(!timeValueList.isEmpty()){
@@ -193,18 +194,27 @@ public class MainActivity extends Activity {
 		rdb.add(r);
 	}
 
-	public void addAlarm(int year,int month){
+	public void addAlarm(int year,int month, int day, int hour, int minute, int second, String str){
 		AlarmManager am=(AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-       // intent.putExtra(ONE_TIME, Boolean.TRUE);
         
-        PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(),0/*id here*/, intent, 0);
+       // intent.putExtra(ONE_TIME, Boolean.TRUE);
+        Random i = new Random();
+        int value = i.nextInt(200);
+        
+        intent.putExtra("ID", value);
+        Reminder r =  new Reminder(value, str, "");
+        ReminderDB db = new ReminderDB(getApplicationContext());
+        db.add(r);
+        db.close();
+        
+        PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(),value/*id here*/, intent, 0);
         
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 8);
-        calendar.set(Calendar.MINUTE, 30);
-        
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, second);
         
         
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
