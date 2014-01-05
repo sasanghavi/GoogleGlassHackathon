@@ -25,8 +25,8 @@
     <string name="reset">Reset</string>
     <string name="resume">Resume</string>
     <string name="set_timer">Set timer</string>
-    <string name="start">Start</string>
-    <string name="stop">Stop</string>
+    <string name="ok">ok</string>
+    <string name="cancel">cancel</string>
 
     <string name="hours">hours</string>
     <string name="minutes">minutes</string>
