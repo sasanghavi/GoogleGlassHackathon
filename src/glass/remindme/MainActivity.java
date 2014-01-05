@@ -93,7 +93,7 @@ public class MainActivity extends Activity {
 					tv1.append(this.getIndicator() + " " + timeValueList.get(0).toString() + this.getTimeType());
 					
 					
-					addAlarm(year,month,day,hour,minute,second+15,"Hello World");
+					addAlarm(year,month,day,hour,minute,second+5,"Hello World");
 				}
 			}else if(this.getIndicator().equals("at") || this.getIndicator().equals("around")){
 				if(!timeValueList.isEmpty()){

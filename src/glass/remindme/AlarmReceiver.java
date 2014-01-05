@@ -18,13 +18,13 @@ public class AlarmReceiver extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.alarm_receiver);
 		TextView data = (TextView) findViewById(R.id.alarmReceiverData);
-		TextView time = (TextView) findViewById(R.id.alarmReceiverSysTime);
-		time.setText((int) System.currentTimeMillis());
+		//TextView time = (TextView) findViewById(R.id.alarmReceiverSysTime);
+		//time.setText((int) System.currentTimeMillis());
 		id = getIntent().getIntExtra("ID", 0);
 		db = new ReminderDB(getApplicationContext());
 		data.setText("You need to "+db.get(id));
 		AudioManager audio = (AudioManager) getApplicationContext()
 				.getSystemService(Context.AUDIO_SERVICE);
-		audio.playSoundEffect(Sounds.SUCCESS);
+		audio.playSoundEffect(Sounds.ERROR);
 	}
 }
